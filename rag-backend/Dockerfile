@@ -1,4 +1,4 @@
-# Use official lightweight Python image
+# Use a minimal base image
 FROM python:3.10-slim
 
 # Set environment variables for Python optimization
@@ -8,13 +8,14 @@ ENV PYTHONUNBUFFERED=1 \
 # Set working directory inside the container
 WORKDIR /app
 
-# Install system dependencies for psycopg2
-RUN apt-get update && apt-get install -y libpq-dev gcc
+# Install system dependencies for PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev gcc \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*  # ✅ Frees up space
 
 # Copy only necessary files for dependency installation
 COPY requirements.txt .
 
-# Install dependencies
+# Install dependencies without cache
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 

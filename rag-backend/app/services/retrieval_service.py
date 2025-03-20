@@ -1,4 +1,3 @@
-import json
 import numpy as np
 from sqlalchemy.orm import Session
 from app.models.database import DocumentEmbedding
@@ -16,11 +15,10 @@ def retrieve_relevant_docs(db: Session, query: str, top_n: int = 3):
 
     similarities = []
     for doc in docs:
-        stored_embedding = json.loads(doc.embedding)
-        similarity = cosine_similarity(query_embedding, stored_embedding)
+        similarity = cosine_similarity(query_embedding, doc.embedding)
         similarities.append((doc, similarity))
 
     # Sort documents by similarity in descending order
     similarities.sort(key=lambda x: x[1], reverse=True)
     
-    return [{"content": doc.content, "metadata": json.loads(doc.metadata), "similarity": sim} for doc, sim in similarities[:top_n]]
+    return [{"content": doc.content, "metadata": doc.doc_metadata, "similarity": sim} for doc, sim in similarities[:top_n]]
