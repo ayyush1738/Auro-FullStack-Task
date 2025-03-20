@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+sqlalchemy
+redis
+requests
+pdfplumber
+numpy
+python-dotenv
+psycopg2-binary  
+sentence-transformers
+python-multipart
