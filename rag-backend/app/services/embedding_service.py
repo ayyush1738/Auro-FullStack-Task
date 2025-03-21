@@ -2,19 +2,22 @@ from sentence_transformers import SentenceTransformer
 import json
 from app.models.database import redis_client
 import numpy as np
+from app.utils.cache import get_cached_embedding, cache_embedding
 
 
 # Load embedding model (optimized for fast CPU inference)
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-import numpy as np
-
 def generate_embedding(text: str):
-    """Generates embeddings using a local Sentence Transformer model."""
+    """Generates embeddings using a local Sentence Transformer model with Redis caching."""
+    cached = get_cached_embedding(text)
+    if cached:
+        return cached
 
-    # Generate embedding
-    embedding = model.encode(text)  # Generate embedding
-    embedding = np.array(embedding, dtype=np.float32).tolist()  # ✅ Ensure proper float array
-    return embedding  # Return proper float list
+    embedding = model.encode(text)
+    embedding = np.array(embedding, dtype=np.float32).tolist()
+    cache_embedding(text, embedding)
+    return embedding
+
 
 

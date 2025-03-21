@@ -7,23 +7,20 @@ from app.api import document_routes, qna_routes, healthcheck
 from fastapi.exceptions import RequestValidationError
 from app.models.database import SessionLocal
 
-# Load environment variables
 load_dotenv()
-
-# Configure Logging
+# basic logging for better dev experience
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Initialize FastAPI app
 app = FastAPI(title="RAG Backend", version="1.0")
 
-# Middleware: Enable CORS for frontend applications
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to specific domains in production
+    allow_origins=["http://localhost:5173"],  # Specify the frontend origin here
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Track server uptime
 start_time = time.time()
