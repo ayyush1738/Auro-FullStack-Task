@@ -4,10 +4,6 @@ import "./FancyUploadButton.css";
 const FancyUploadButton = ({ onFileSelect }) => {
   const fileInputRef = useRef();
 
-  const handleClick = () => {
-    fileInputRef.current.click();
-  };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && onFileSelect) {
@@ -16,7 +12,7 @@ const FancyUploadButton = ({ onFileSelect }) => {
   };
 
   return (
-    <>
+    <div className="fancy-upload-wrapper" onClick={() => fileInputRef.current.click()}>
       <input
         type="file"
         accept="application/pdf"
@@ -24,8 +20,9 @@ const FancyUploadButton = ({ onFileSelect }) => {
         onChange={handleFileChange}
         style={{ display: "none" }}
       />
-      <button className="continue-application" onClick={handleClick}>
-        <div>
+
+      <div className="continue-application" role="button" tabIndex={0}>
+        <div className="icon-wrapper">
           <div className="pencil"></div>
           <div className="folder">
             <div className="top">
@@ -36,9 +33,9 @@ const FancyUploadButton = ({ onFileSelect }) => {
             <div className="paper"></div>
           </div>
         </div>
-        Choose File
-      </button>
-    </>
+        <span>Choose File</span>
+      </div>
+    </div>
   );
 };
 

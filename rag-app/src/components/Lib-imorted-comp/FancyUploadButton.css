@@ -200,3 +200,16 @@
     --pex: -24px;
   }
   
+  .fancy-upload-wrapper {
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .continue-application {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  

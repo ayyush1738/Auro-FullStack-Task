@@ -51,7 +51,7 @@ const DocumentPanel = ({ onUpload }) => {
         <div className="flex items-center space-x-4">
           <FancyUploadButton onFileSelect={handleFileChange} />
           <button
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow disabled:opacity-50"
+            className="bg-green-600 cursor-pointer hover:bg-green-700 shadow-lg shadow-green-700/50 text-white px-4 py-2 rounded shadow disabled:opacity-50"
             onClick={handleUploadClick}
             disabled={!file || uploading}
           >
@@ -61,6 +61,7 @@ const DocumentPanel = ({ onUpload }) => {
       </div>
 
       <h1 className="text-lg font-medium text-white">Available Documents</h1>
+      <section>Click the container to see the content of the Document</section>
       <div className="mt-2 overflow-y-auto custom-scrollbar p-4">
         {documents.length === 0 ? (
           <p className="text-sm text-gray-300 italic text-center mt-4">
@@ -70,7 +71,7 @@ const DocumentPanel = ({ onUpload }) => {
           documents.map((doc) => (
             <div
               key={doc.id}
-              className="bg-white shadow-sm rounded-md p-2 mb-2 cursor-pointer hover:bg-indigo-100"
+              className="bg-white shadow-sm rounded-md p-2 mb-2 cursor-pointer hover:bg-indigo-100 "
             >
               <div className="flex justify-between items-center">
                 <span
@@ -82,7 +83,7 @@ const DocumentPanel = ({ onUpload }) => {
                 </span>
                 <button
                   onClick={() => handleDelete(doc.id)}
-                  className="text-red-500 text-xs bg-gray-100 rounded px-2 py-0.5 hover:bg-red-100"
+                  className="text-red-500 text-xs cursor-pointer bg-gray-100 rounded px-2 py-0.5 hover:bg-red-100"
                 >
                   Delete
                 </button>

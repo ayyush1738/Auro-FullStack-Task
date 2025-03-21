@@ -40,7 +40,7 @@ const ChatArea = ({ messages, onSend }) => {
   }, [messages, typingMessage]);
 
   return (
-    <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6">
+    <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6 ">
       <div className="flex-1 w-full max-w-3xl overflow-y-auto custom-scrollbar bg-gray-400 rounded-lg shadow-inner px-4 py-6">
         <div className="flex flex-col space-y-3">
           {isEmpty ? (
