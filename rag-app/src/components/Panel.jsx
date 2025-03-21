@@ -54,7 +54,7 @@ const LeftPanel = ({
 
       {/* Modal Panel */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center custom-scrollbar">
+        <div className="fixed inset-0 z-50 p-4 bg-black bg-opacity-50 flex items-center justify-center custom-scrollbar">
           <div className="relative bg-gray-500 p-4 rounded-lg w-84 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <button
               onClick={() => setIsOpen(false)}
