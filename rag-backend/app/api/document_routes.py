@@ -66,3 +66,15 @@ async def ingest_document(
         raise  # Preserve FastAPI exceptions
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{doc_id}")
+async def delete_document(doc_id: str, db: Session = Depends(get_db)):
+    doc = db.query(DocumentEmbedding).filter(DocumentEmbedding.id == doc_id).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    db.delete(doc)
+    db.commit()
+    return {"message": "Document deleted"}
+
