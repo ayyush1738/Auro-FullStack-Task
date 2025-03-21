@@ -62,16 +62,32 @@ function App() {
     if (activeSession === id) setActiveSession(null);
   };
 
+  const handleNewChat = () => {
+    const newId = uuidv4();
+    const newSession = {
+      title: "New Chat",
+      messages: [],
+    };
+
+    setSessions((prev) => ({
+      ...prev,
+      [newId]: newSession,
+    }));
+
+    setActiveSession(newId);
+  };
+
   return (
     <div className="flex h-screen">
-      <LeftPanel 
+      <LeftPanel
         sessions={sessions}
         activeSession={activeSession}
         onSelectSession={setActiveSession}
         onDeleteSession={handleDeleteSession}
         onUpload={handleUpload}
+        onNewChat={handleNewChat}
       />
-      <ChatArea 
+      <ChatArea
         messages={sessions[activeSession]?.messages || []}
         onSend={handleSend}
       />
