@@ -1,93 +1,82 @@
 import { useState } from "react";
-import axios from "axios";
+import ChatArea from "./components/Chat";
+import LeftPanel from "./components/Panel";
+import { v4 as uuidv4 } from "uuid";
 
-export default function App() {
-  const [file, setFile] = useState(null);
-  const [text, setText] = useState("");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [loading, setLoading] = useState(false);
+function App() {
+  const [sessions, setSessions] = useState({});
+  const [activeSession, setActiveSession] = useState(null);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleSend = async (question) => {
+    const sessionId = activeSession || uuidv4();
+    const existingSession = sessions[sessionId] || { title: question, messages: [] };
+
+    const updatedMessages = [...existingSession.messages, { type: "user", text: question }];
+
+    setSessions({
+      ...sessions,
+      [sessionId]: {
+        ...existingSession,
+        title: existingSession.title || question,
+        messages: updatedMessages,
+      },
+    });
+
+    if (!activeSession) setActiveSession(sessionId);
+
+    const res = await fetch("http://localhost:8000/query/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question }),
+    });
+
+    const data = await res.json();
+    const botMsg = { type: "bot", text: data.answer };
+
+    setSessions((prev) => ({
+      ...prev,
+      [sessionId]: {
+        ...prev[sessionId],
+        messages: [...prev[sessionId].messages, botMsg],
+      },
+    }));
   };
 
-  const handleUpload = async () => {
-    if (!file && !text) return alert("Please upload a file or enter text");
-    setLoading(true);
+  const handleUpload = async (file) => {
     const formData = new FormData();
-    if (file) formData.append("file", file);
-    if (text) formData.append("content", text);
-    
-    try {
-      const response = await axios.post("http://localhost:8000/documents/", formData);
-      alert("Document Uploaded: " + response.data.id);
-    } catch (error) {
-      alert("Upload failed: " + error.response?.data?.detail);
-    }
-    setLoading(false);
+    formData.append("file", file);
+
+    const res = await fetch("http://localhost:8000/documents/", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    alert(data.message || "Uploaded!");
   };
 
-  const handleQuery = async () => {
-    if (!question) return alert("Please enter a question");
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/query/",
-        { question },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true, // ✅ Ensure CORS credentials are included
-        }
-      );
-      
-      
-      setAnswer(response.data.answer);
-    } catch (error) {
-      alert("Query failed: " + error.response?.data?.detail);
-    }
-    setLoading(false);
+  const handleDeleteSession = (id) => {
+    const copy = { ...sessions };
+    delete copy[id];
+    setSessions(copy);
+    if (activeSession === id) setActiveSession(null);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">RAG-Based Q&A</h1>
-      <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md">
-        <input type="file" onChange={handleFileChange} className="mb-2 block w-full border p-2" />
-        <textarea
-          placeholder="Or enter text manually"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="w-full border p-2 mb-2"
-        />
-        <button
-          onClick={handleUpload}
-          className="w-full bg-blue-500 text-white p-2 rounded-lg"
-          disabled={loading}
-        >
-          {loading ? "Uploading..." : "Upload Document"}
-        </button>
-      </div>
-
-      <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md mt-6">
-        <input
-          type="text"
-          placeholder="Ask a question"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="w-full border p-2 mb-2"
-        />
-        <button
-          onClick={handleQuery}
-          className="w-full bg-green-500 text-white p-2 rounded-lg"
-          disabled={loading}
-        >
-          {loading ? "Fetching..." : "Get Answer"}
-        </button>
-        {answer && <p className="mt-4 p-2 bg-gray-100 rounded">{answer}</p>}
-      </div>
+    <div className="flex h-screen w-screen">
+      <LeftPanel 
+        sessions={sessions}
+        activeSession={activeSession}
+        onSelectSession={setActiveSession}
+        onDeleteSession={handleDeleteSession}
+        onUpload={handleUpload}
+      />
+      <ChatArea 
+        messages={sessions[activeSession]?.messages || []}
+        onSend={handleSend}
+      />
     </div>
   );
 }
+
+export default App;

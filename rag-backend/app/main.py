@@ -56,7 +56,7 @@ def home():
 app.include_router(document_routes.router, prefix="/documents", tags=["Document Ingestion"])
 app.include_router(qna_routes.router, prefix="/query", tags=["Q&A"])
 app.include_router(healthcheck.router, prefix="/health", tags=["Health Check"])
-app.include_router(available_docs.router, prefix="/docs", tags=["Docs Available"])
+app.include_router(available_docs.router, prefix="/list", tags=["Docs Available"])
 
 # Lifespan event for database cleanup
 @app.on_event("shutdown")
