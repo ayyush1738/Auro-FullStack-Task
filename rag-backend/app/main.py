@@ -3,9 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 import time
 from dotenv import load_dotenv
-from app.api import document_routes, qna_routes, healthcheck
+from app.api import available_docs, document_routes, qna_routes, healthcheck
 from fastapi.exceptions import RequestValidationError
 from app.models.database import SessionLocal
+
 
 load_dotenv()
 # basic logging for better dev experience
@@ -55,6 +56,7 @@ def home():
 app.include_router(document_routes.router, prefix="/documents", tags=["Document Ingestion"])
 app.include_router(qna_routes.router, prefix="/query", tags=["Q&A"])
 app.include_router(healthcheck.router, prefix="/health", tags=["Health Check"])
+app.include_router(available_docs.router, prefix="/docs", tags=["Docs Available"])
 
 # Lifespan event for database cleanup
 @app.on_event("shutdown")

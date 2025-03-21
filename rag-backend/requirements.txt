@@ -9,4 +9,5 @@ python-dotenv
 psycopg2-binary  
 sentence-transformers
 python-multipart
-ollama
+groq
+json

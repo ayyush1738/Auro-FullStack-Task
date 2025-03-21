@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import json
 import numpy as np
-import ollama
+# import ollama
 from app.models.database import SessionLocal, DocumentEmbedding
 from app.services.embedding_service import generate_embedding
+from app.utils.groq_chat import generate_answer_groq
+
 
 router = APIRouter()
 
@@ -52,15 +54,12 @@ async def query_rag(question: str, db: Session = Depends(get_db)):
         document_context = best_match.content
 
         # Generate an answer using Llama 3 (Ollama)
-        model_response = ollama.chat(
-            model="llama3",
-            messages=[
-                {"role": "system", "content": "You are an AI answering questions based on the provided document."},
-                {"role": "user", "content": f"Context:\n{document_context}\n\nQuestion: {question}\n\nAnswer in a concise way:"}
-            ]
-        )
 
-        return {"answer": model_response["message"]}
+        # inside the query_rag endpoint:
+        answer = generate_answer_groq(question, best_match.content)
+        return {"answer": answer}
+
+
 
     except HTTPException:
         raise
