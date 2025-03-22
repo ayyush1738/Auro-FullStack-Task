@@ -3,28 +3,24 @@ import { useState, useEffect, useRef } from "react";
 const ChatArea = ({ messages, onSend }) => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [typingMessage, setTypingMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const chatEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   const isEmpty = messages.length === 0;
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    setTypingMessage("");
     const userInput = input.trim();
     setInput("");
     setLoading(true);
+    setErrorMessage("");
 
     try {
       const botResponse = await onSend(userInput);
 
       if (!botResponse) {
         setErrorMessage("⚠️ Server is currently unavailable.");
-      } else {
-        setErrorMessage("");
-        setTypingMessage(botResponse);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -35,18 +31,18 @@ const ChatArea = ({ messages, onSend }) => {
   };
 
   useEffect(() => {
-    if (messages.length > 0) {
-      setErrorMessage("");
+    // Scroll to bottom when messages update
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typingMessage]);
-
   return (
     <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6">
-      <div className="flex-1 w-full max-w-3xl overflow-y-auto custom-scrollbar bg-gray-400 rounded-lg shadow-inner px-4 py-6">
+      <div
+        ref={chatContainerRef}
+        className="flex-1 w-full max-w-3xl overflow-y-auto custom-scrollbar bg-gray-400 rounded-lg shadow-inner px-4 py-6"
+      >
         <div className="flex flex-col space-y-3">
           {isEmpty ? (
             <div className="text-center text-white py-10">
@@ -81,14 +77,6 @@ const ChatArea = ({ messages, onSend }) => {
               <div className="w-6 h-6 border-4 border-t-4 border-indigo-500 rounded-full animate-spin" />
             </div>
           )}
-
-          {typingMessage && (
-            <div className="px-4 py-2 bg-gray-100 rounded-lg self-start max-w-[80%] text-sm shadow text-gray-900">
-              {typingMessage}
-            </div>
-          )}
-
-          <div ref={chatEndRef}></div>
         </div>
       </div>
 
