@@ -24,6 +24,7 @@ const ChatArea = ({ messages, onSend }) => {
         throw new Error("No response from server.");
       }
   
+      setErrorMessage("");
       setTypingMessage(botResponse);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -33,8 +34,6 @@ const ChatArea = ({ messages, onSend }) => {
     setLoading(false);
   };
   
-  
-
   useEffect(() => {
     if (messages.length === 0) {
       setErrorMessage("");
