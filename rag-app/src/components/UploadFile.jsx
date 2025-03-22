@@ -6,6 +6,8 @@ const DocumentPanel = ({ onUpload }) => {
   const [uploading, setUploading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [activeDoc, setActiveDoc] = useState(null); // for viewing content
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   // Fetch all documents on load
   useEffect(() => {
@@ -15,6 +17,7 @@ const DocumentPanel = ({ onUpload }) => {
         setDocuments(data.documents || []);
       });
   }, []);
+  
 
   const handleFileChange = (selectedFile) => {
     setFile(selectedFile);
@@ -23,15 +26,24 @@ const DocumentPanel = ({ onUpload }) => {
   const handleUploadClick = async () => {
     if (file) {
       setUploading(true);
-      await onUpload(file);
-      setFile(null);
+      setErrorMessage("");
+  
+      try {
+        await onUpload(file);
+        setFile(null);
+  
+        const res = await fetch("https://auro-fullstack-task-production.up.railway.app/documents/list");
+        const data = await res.json();
+        setDocuments(data.documents || []);
+      } catch (error) {
+        console.error("Error uploading or refreshing document list:", error);
+        setErrorMessage("⚠️ Server is currently unavailable.");
+      }
+  
       setUploading(false);
-
-      const res = await fetch("https://auro-fullstack-task-production.up.railway.app/documents/list");
-      const data = await res.json();
-      setDocuments(data.documents || []);
     }
   };
+  
 
   const handleDelete = async (id) => {
     const res = await fetch(`https://auro-fullstack-task-production.up.railway.app/document/${id}`, {
@@ -58,6 +70,13 @@ const DocumentPanel = ({ onUpload }) => {
           </button>
         </div>
       </div>
+
+      {errorMessage && (
+  <div className="text-red-500 text-sm font-medium bg-red-100 border border-red-400 px-4 py-2 rounded">
+    {errorMessage}
+  </div>
+)}
+
 
       <h1 className="text-lg font-medium text-white">Available Documents</h1>
       <section>Click the container to see the content of the Document</section>

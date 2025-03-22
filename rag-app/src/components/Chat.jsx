@@ -8,36 +8,39 @@ const ChatArea = ({ messages, onSend }) => {
 
   const isEmpty = messages.length === 0;
 
-  const simulateTyping = (text) => {
-    let index = 0;
-    if (!text) return;
-    setTypingMessage("");
-    const intervalId = setInterval(() => {
-      setTypingMessage((prev) => prev + text[index]);
-      index += 1;
-      if (index >= text.length) {
-        clearInterval(intervalId);
-      }
-    }, 40);
-  };
-
   const handleSend = async () => {
     if (!input.trim()) return;
+    setTypingMessage("");
+
     const userInput = input.trim();
     setInput("");
     setLoading(true);
-
-    const botResponse = await onSend(userInput);
-    simulateTyping(botResponse);
-
+  
+    try {
+      const botResponse = await onSend(userInput);
+  
+      if (!botResponse) {
+        throw new Error("Empty response");
+      }
+  
+      setTypingMessage(botResponse);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setTypingMessage("⚠️ Server is currently unavailable.");
+    }
+  
     setLoading(false);
   };
+  
 
   useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // Clear typing message and loader when a new chat session is started
+    if (messages.length === 0) {
+      setTypingMessage("");
+      setLoading(false);
     }
-  }, [messages, typingMessage]);
+  }, [messages]);
+  
 
   return (
     <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6 ">
