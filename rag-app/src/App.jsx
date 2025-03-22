@@ -24,7 +24,7 @@ function App() {
 
     if (!activeSession) setActiveSession(sessionId);
 
-    const res = await fetch("http://localhost:8000/query/", {
+    const res = await fetch("http://localhost:8000/chat/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question }),
@@ -46,13 +46,13 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:8000/documents/", {
+    const res = await fetch("http://localhost:8000/document/upload", {
       method: "POST",
       body: formData,
     });
 
     const data = await res.json();
-    alert(data.message || "Uploaded!");
+    res.json().then((data) => console.log(data));
   };
 
   const handleDeleteSession = (id) => {

@@ -16,7 +16,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/")
+@router.post("/upload")
 async def ingest_document(
     content: str = Form(None),
     metadata: str = Form("{}"),

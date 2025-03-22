@@ -12,7 +12,7 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/")
+@router.get("/list")
 async def list_documents(db: Session = Depends(get_db)):
     """
     Returns all documents with full content, metadata, and ID.

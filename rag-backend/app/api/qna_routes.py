@@ -19,7 +19,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/")
+@router.post("/ask")
 async def query_rag(req: QuestionRequest, db: Session = Depends(get_db)):
     """Retrieves relevant document embeddings and generates answers using Groq API."""
     try:

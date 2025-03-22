@@ -16,7 +16,7 @@ app = FastAPI(title="RAG Backend", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Specify the frontend origin here
+    allow_origins=["https://auro-full-stack-task.vercel.app"],  # Specify the frontend origin here
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,10 +53,10 @@ def home():
     return {"message": "Welcome to the RAG API", "uptime_seconds": uptime}
 
 # API Routes
-app.include_router(document_routes.router, prefix="/documents", tags=["Document Ingestion"])
-app.include_router(qna_routes.router, prefix="/query", tags=["Q&A"])
-app.include_router(healthcheck.router, prefix="/health", tags=["Health Check"])
-app.include_router(available_docs.router, prefix="/list", tags=["Docs Available"])
+app.include_router(document_routes.router, prefix="/document", tags=["Document Ingestion"])
+app.include_router(qna_routes.router, prefix="/chat", tags=["Q&A"])
+app.include_router(healthcheck.router, prefix="/healtheck", tags=["Health Check"])
+app.include_router(available_docs.router, prefix="/documents", tags=["Docs Available"])
 
 # Lifespan event for database cleanup
 @app.on_event("shutdown")

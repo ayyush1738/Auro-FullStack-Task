@@ -46,7 +46,7 @@ const LeftPanel = ({
       <div className="absolute top-2 left-2 z-50">
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer text-white px-4 py-2 rounded shadow-md"
+          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer text-white px-4 py-2 rounded"
         >
           Show Menu
         </button>

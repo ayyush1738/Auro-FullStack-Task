@@ -9,7 +9,7 @@ const DocumentPanel = ({ onUpload }) => {
 
   // Fetch all documents on load
   useEffect(() => {
-    fetch("http://localhost:8000/list/")
+    fetch("http://localhost:8000/documents/list")
       .then((res) => res.json())
       .then((data) => {
         setDocuments(data.documents || []);
@@ -27,15 +27,14 @@ const DocumentPanel = ({ onUpload }) => {
       setFile(null);
       setUploading(false);
 
-      // Refetch documents after upload
-      const res = await fetch("http://localhost:8000/list/");
+      const res = await fetch("http://localhost:8000/documents/list");
       const data = await res.json();
       setDocuments(data.documents || []);
     }
   };
 
   const handleDelete = async (id) => {
-    const res = await fetch(`http://localhost:8000/documents/${id}`, {
+    const res = await fetch(`http://localhost:8000/document/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -51,7 +50,7 @@ const DocumentPanel = ({ onUpload }) => {
         <div className="flex items-center space-x-4">
           <FancyUploadButton onFileSelect={handleFileChange} />
           <button
-            className="bg-green-600 cursor-pointer hover:bg-green-700 shadow-lg shadow-green-700/50 text-white px-4 py-2 rounded shadow disabled:opacity-50"
+            className="bg-green-600 cursor-pointer hover:bg-green-700 shadow-lg shadow-green-700/50 text-white px-4 py-2 rounded  disabled:opacity-50"
             onClick={handleUploadClick}
             disabled={!file || uploading}
           >
