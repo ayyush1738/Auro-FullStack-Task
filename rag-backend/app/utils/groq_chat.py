@@ -12,7 +12,7 @@ def get_groq_client():
         _client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     return _client
 
-def generate_answer_groq(question: str, context: str, model: str = "llama3-70b-8192") -> str:
+def generate_answer_groq(question: str, context: str, model: str = "llama-3.1-8b-instant") -> str:
     """
     Generate a context-aware answer using Groq API.
     """
