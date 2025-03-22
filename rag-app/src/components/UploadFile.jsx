@@ -9,7 +9,7 @@ const DocumentPanel = ({ onUpload }) => {
 
   // Fetch all documents on load
   useEffect(() => {
-    fetch("http://localhost:8000/documents/list")
+    fetch("https://auro-fullstack-task-production.up.railway.app/documents/list")
       .then((res) => res.json())
       .then((data) => {
         setDocuments(data.documents || []);
