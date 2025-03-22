@@ -10,8 +10,8 @@ const ChatArea = ({ messages, onSend }) => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+  
     setTypingMessage("");
-
     const userInput = input.trim();
     setInput("");
     setLoading(true);
@@ -19,8 +19,8 @@ const ChatArea = ({ messages, onSend }) => {
     try {
       const botResponse = await onSend(userInput);
   
-      if (!botResponse) {
-        throw new Error("Empty response");
+      if (botResponse === null || botResponse === undefined) {
+        throw new Error("No response from server.");
       }
   
       setTypingMessage(botResponse);
@@ -32,9 +32,9 @@ const ChatArea = ({ messages, onSend }) => {
     setLoading(false);
   };
   
+  
 
   useEffect(() => {
-    // Clear typing message and loader when a new chat session is started
     if (messages.length === 0) {
       setTypingMessage("");
       setLoading(false);
@@ -68,26 +68,22 @@ const ChatArea = ({ messages, onSend }) => {
             ))
           )}
 
-          {/* Typing animation */}
           {typingMessage && (
             <div className="px-4 py-2 bg-gray-200 rounded-lg self-start max-w-[80%] text-sm shadow">
               {typingMessage}
             </div>
           )}
 
-          {/* Loader */}
           {loading && (
             <div className="flex items-center justify-center w-full">
               <div className="w-6 h-6 border-4 border-t-4 border-indigo-500 rounded-full animate-spin" />
             </div>
           )}
 
-          {/* Scroll anchor */}
           <div ref={chatEndRef}></div>
         </div>
       </div>
 
-      {/* Input Area */}
       <div className="flex w-full max-w-3xl mt-4">
         <input
           className="flex-1 border border-gray-300 text-white bg-gray-500 bg-opacity-50 rounded-l-md p-3 shadow focus:outline-none focus:ring focus:ring-indigo-300 inset-shadow-sm inset-shadow-black"

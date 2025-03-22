@@ -5,7 +5,7 @@ def store_embedding(db: Session, doc_id: str, embedding: list, metadata: dict, c
     """Stores the generated embedding in PostgreSQL."""
     new_doc = DocumentEmbedding(
         id=doc_id,
-        embedding=embedding,  # ✅ Store directly as a list of floats
+        embedding=embedding,  
         doc_metadata=metadata,
         content=content
     )

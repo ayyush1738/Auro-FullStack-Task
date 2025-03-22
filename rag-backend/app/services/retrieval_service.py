@@ -18,7 +18,6 @@ def retrieve_relevant_docs(db: Session, query: str, top_n: int = 3):
         similarity = cosine_similarity(query_embedding, doc.embedding)
         similarities.append((doc, similarity))
 
-    # Sort documents by similarity in descending order
     similarities.sort(key=lambda x: x[1], reverse=True)
     
     return [{"content": doc.content, "metadata": doc.doc_metadata, "similarity": sim} for doc, sim in similarities[:top_n]]
