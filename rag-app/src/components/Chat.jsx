@@ -23,7 +23,7 @@ const ChatArea = ({ messages, onSend }) => {
       if (!botResponse) {
         setErrorMessage("⚠️ Server is currently unavailable.");
       } else {
-        setErrorMessage(""); // ✅ clear old error
+        setErrorMessage("");
         setTypingMessage(botResponse);
       }
     } catch (error) {
@@ -37,8 +37,7 @@ const ChatArea = ({ messages, onSend }) => {
   
   useEffect(() => {
     if (messages.length > 0) {
-      setErrorMessage(""); // ✅ Clear error once there's at least one valid message
-      setLoading(false);
+      setErrorMessage(""); 
     }
   }, [messages]);
   
