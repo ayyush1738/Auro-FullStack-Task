@@ -28,13 +28,10 @@ async def query_rag(req: QuestionRequest, db: Session = Depends(get_db)):
         if not question:
             raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
-        # Generate question embedding
         question_embedding = generate_embedding(question)
 
-        # Retrieve all stored documents
         docs = db.query(DocumentEmbedding).all()
 
-        # Find the most relevant document using cosine similarity
         best_match = None
         best_similarity = -1
 
@@ -53,7 +50,6 @@ async def query_rag(req: QuestionRequest, db: Session = Depends(get_db)):
         if not best_match:
             return {"answer": "No relevant documents found."}
 
-        # Generate an answer using Groq API
         document_context = best_match.content
         answer = generate_answer_groq(question, document_context)
         return {"answer": answer}

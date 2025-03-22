@@ -1,15 +1,23 @@
 import os
-from groq import Groq
 from dotenv import load_dotenv
+from groq import Groq
+
 load_dotenv()
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+_client = None
+
+def get_groq_client():
+    global _client
+    if _client is None:
+        _client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    return _client
 
 def generate_answer_groq(question: str, context: str, model: str = "llama3-70b-8192") -> str:
     """
     Generate a context-aware answer using Groq API.
     """
     try:
+        client = get_groq_client()
         chat_completion = client.chat.completions.create(
             messages=[
                 {
