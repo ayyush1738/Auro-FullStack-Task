@@ -11,15 +11,15 @@ const ChatArea = ({ messages, onSend }) => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-  
+
     setTypingMessage("");
     const userInput = input.trim();
     setInput("");
     setLoading(true);
-  
+
     try {
       const botResponse = await onSend(userInput);
-  
+
       if (!botResponse) {
         setErrorMessage("⚠️ Server is currently unavailable.");
       } else {
@@ -30,21 +30,22 @@ const ChatArea = ({ messages, onSend }) => {
       console.error("Unexpected error:", error);
       setErrorMessage("⚠️ Server is currently unavailable.");
     }
-  
+
     setLoading(false);
   };
-  
-  
+
   useEffect(() => {
     if (messages.length > 0) {
-      setErrorMessage(""); 
+      setErrorMessage("");
     }
   }, [messages]);
-  
-  
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, typingMessage]);
 
   return (
-    <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6 ">
+    <div className="flex flex-col flex-1 items-center bg-gray-800 w-full px-4 py-6">
       <div className="flex-1 w-full max-w-3xl overflow-y-auto custom-scrollbar bg-gray-400 rounded-lg shadow-inner px-4 py-6">
         <div className="flex flex-col space-y-3">
           {isEmpty ? (
@@ -81,6 +82,12 @@ const ChatArea = ({ messages, onSend }) => {
             </div>
           )}
 
+          {typingMessage && (
+            <div className="px-4 py-2 bg-gray-100 rounded-lg self-start max-w-[80%] text-sm shadow text-gray-900">
+              {typingMessage}
+            </div>
+          )}
+
           <div ref={chatEndRef}></div>
         </div>
       </div>
@@ -99,7 +106,7 @@ const ChatArea = ({ messages, onSend }) => {
         />
         <button
           onClick={handleSend}
-          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer hover:bg-indigo-700 text-white px-5 py-3 rounded-r-md "
+          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer hover:bg-indigo-700 text-white px-5 py-3 rounded-r-md"
         >
           Send
         </button>
