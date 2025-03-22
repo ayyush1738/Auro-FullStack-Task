@@ -27,14 +27,14 @@ const DocumentPanel = ({ onUpload }) => {
       setFile(null);
       setUploading(false);
 
-      const res = await fetch("http://localhost:8000/documents/list");
+      const res = await fetch("https://auro-fullstack-task-production.up.railway.app/documents/list");
       const data = await res.json();
       setDocuments(data.documents || []);
     }
   };
 
   const handleDelete = async (id) => {
-    const res = await fetch(`http://localhost:8000/document/${id}`, {
+    const res = await fetch(`https://auro-fullstack-task-production.up.railway.app/document/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {

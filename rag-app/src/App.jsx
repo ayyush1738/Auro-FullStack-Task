@@ -24,7 +24,7 @@ function App() {
 
     if (!activeSession) setActiveSession(sessionId);
 
-    const res = await fetch("http://localhost:8000/chat/ask", {
+    const res = await fetch("https://auro-fullstack-task-production.up.railway.app/chat/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question }),
@@ -46,7 +46,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:8000/document/upload", {
+    const res = await fetch("https://auro-fullstack-task-production.up.railway.app/document/upload", {
       method: "POST",
       body: formData,
     });

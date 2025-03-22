@@ -9,21 +9,18 @@ from app.models.database import SessionLocal
 
 
 load_dotenv()
-# basic logging for better dev experience
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 app = FastAPI(title="RAG Backend", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://auro-full-stack-task.vercel.app"],  # Specify the frontend origin here
+    allow_origins=["https://auro-full-stack-task.vercel.app"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# Track server uptime
 start_time = time.time()
 
 @app.middleware("http")
@@ -52,13 +49,11 @@ def home():
     uptime = round(time.time() - start_time, 2)
     return {"message": "Welcome to the RAG API", "uptime_seconds": uptime}
 
-# API Routes
 app.include_router(document_routes.router, prefix="/document", tags=["Document Ingestion"])
 app.include_router(qna_routes.router, prefix="/chat", tags=["Q&A"])
-app.include_router(healthcheck.router, prefix="/healtheck", tags=["Health Check"])
+app.include_router(healthcheck.router, prefix="/healthcheck", tags=["Health Check"])
 app.include_router(available_docs.router, prefix="/documents", tags=["Docs Available"])
 
-# Lifespan event for database cleanup
 @app.on_event("shutdown")
 def shutdown_db_connection():
     """Closes the database session on shutdown."""
