@@ -6,27 +6,21 @@ import os
 import redis
 from sqlalchemy import Float
 
+DB_URL = os.environ["DATABASE_URL"]  # force it to crash if not provided
+REDIS_URL = os.environ["REDIS_URL"]
 
-# Load env variables
-DB_URL = os.getenv("DATABASE_URL", "postgresql://postgres:1738@localhost:5432/rag_db")
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-
-# PostgreSQL Database Setup
 engine = create_engine(DB_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
-# Redis Cache Setup
 redis_client = redis.Redis.from_url(REDIS_URL)
 
-# Document Embedding Model (Now uses `pgvector`)
 class DocumentEmbedding(Base):
     __tablename__ = "document_embeddings"
 
     id = Column(String, primary_key=True)
-    embedding = Column(ARRAY(Float), nullable=False)  # ✅ Uses proper PostgreSQL array type
+    embedding = Column(ARRAY(Float), nullable=False)  
     doc_metadata = Column(JSON)
     content = Column(Text, nullable=False)
 
-# Create tables
 Base.metadata.create_all(bind=engine)
