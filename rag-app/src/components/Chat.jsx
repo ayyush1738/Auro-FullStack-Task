@@ -20,26 +20,28 @@ const ChatArea = ({ messages, onSend }) => {
     try {
       const botResponse = await onSend(userInput);
   
-      if (botResponse === null || botResponse === undefined) {
-        throw new Error("No response from server.");
+      if (!botResponse) {
+        setErrorMessage("⚠️ Server is currently unavailable.");
+      } else {
+        setErrorMessage(""); // ✅ clear old error
+        setTypingMessage(botResponse);
       }
-  
-      setErrorMessage("");
-      setTypingMessage(botResponse);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Unexpected error:", error);
       setErrorMessage("⚠️ Server is currently unavailable.");
     }
   
     setLoading(false);
   };
   
+  
   useEffect(() => {
-    if (messages.length === 0) {
-      setErrorMessage("");
+    if (messages.length > 0) {
+      setErrorMessage(""); // ✅ Clear error once there's at least one valid message
       setLoading(false);
     }
   }, [messages]);
+  
   
 
   return (

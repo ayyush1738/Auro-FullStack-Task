@@ -10,9 +10,9 @@ function App() {
   const handleSend = async (question) => {
     const sessionId = activeSession || uuidv4();
     const existingSession = sessions[sessionId] || { title: question, messages: [] };
-
+  
     const updatedMessages = [...existingSession.messages, { type: "user", text: question }];
-
+  
     setSessions({
       ...sessions,
       [sessionId]: {
@@ -21,26 +21,36 @@ function App() {
         messages: updatedMessages,
       },
     });
-
+  
     if (!activeSession) setActiveSession(sessionId);
-
-    const res = await fetch("https://auro-fullstack-task-production.up.railway.app/chat/ask", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
-    });
-
-    const data = await res.json();
-    const botMsg = { type: "bot", text: data.answer };
-
-    setSessions((prev) => ({
-      ...prev,
-      [sessionId]: {
-        ...prev[sessionId],
-        messages: [...prev[sessionId].messages, botMsg],
-      },
-    }));
+  
+    try {
+      const res = await fetch("https://auro-fullstack-task-production.up.railway.app/chat/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+  
+      if (!res.ok) throw new Error("Server responded with an error");
+  
+      const data = await res.json();
+      const botMsg = { type: "bot", text: data.answer };
+  
+      setSessions((prev) => ({
+        ...prev,
+        [sessionId]: {
+          ...prev[sessionId],
+          messages: [...prev[sessionId].messages, botMsg],
+        },
+      }));
+  
+      return data.answer; // ✅ success case
+    } catch (err) {
+      console.error("Error in handleSend:", err);
+      return null; // ❌ error case
+    }
   };
+  
 
   const handleUpload = async (file) => {
     const formData = new FormData();
