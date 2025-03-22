@@ -26,10 +26,10 @@ const ChatArea = ({ messages, onSend }) => {
     const userInput = input.trim();
     setInput("");
     setLoading(true);
-    
-    const botResponse = await onSend(userInput); // Get bot's answer
-    simulateTyping(botResponse); // Animate bot's reply
-    
+
+    const botResponse = await onSend(userInput);
+    simulateTyping(botResponse);
+
     setLoading(false);
   };
 
@@ -49,7 +49,6 @@ const ChatArea = ({ messages, onSend }) => {
               <div className="w-full flex justify-center mt-20 bg-transparent bg-opacity-50">
                 <img src="/assets/auro-logo.png" alt="Auro Logo" className="w-96" />
               </div>
-
             </div>
           ) : (
             messages.map((msg, i) => (
@@ -88,7 +87,7 @@ const ChatArea = ({ messages, onSend }) => {
       {/* Input Area */}
       <div className="flex w-full max-w-3xl mt-4">
         <input
-          className="flex-1 border border-gray-300 text-white bg-gray-500 bg-opacity-50  rounded-l-md p-3 shadow focus:outline-none focus:ring focus:ring-indigo-300 inset-shadow-sm inset-shadow-black"
+          className="flex-1 border border-gray-300 text-white bg-gray-500 bg-opacity-50 rounded-l-md p-3 shadow focus:outline-none focus:ring focus:ring-indigo-300 inset-shadow-sm inset-shadow-black"
           placeholder="Ask a question..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -100,7 +99,7 @@ const ChatArea = ({ messages, onSend }) => {
         />
         <button
           onClick={handleSend}
-          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer hover:bg-indigo-700 text-white px-5 py-3 rounded-r-md shadow"
+          className="bg-indigo-600 shadow-lg shadow-indigo-800/50 cursor-pointer hover:bg-indigo-700 text-white px-5 py-3 rounded-r-md "
         >
           Send
         </button>
