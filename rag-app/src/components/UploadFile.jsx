@@ -5,11 +5,10 @@ const DocumentPanel = ({ onUpload }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [documents, setDocuments] = useState([]);
-  const [activeDoc, setActiveDoc] = useState(null); // for viewing content
+  const [activeDoc, setActiveDoc] = useState(null); 
   const [errorMessage, setErrorMessage] = useState("");
 
 
-  // Fetch all documents on load
   useEffect(() => {
     fetch("https://auro-fullstack-task-production.up.railway.app/documents/list")
       .then((res) => res.json())
@@ -17,6 +16,7 @@ const DocumentPanel = ({ onUpload }) => {
         setDocuments(data.documents || []);
       });
   }, []);
+  
   
 
   const handleFileChange = (selectedFile) => {
