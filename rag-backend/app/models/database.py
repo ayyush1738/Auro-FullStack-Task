@@ -6,7 +6,7 @@ import os
 import redis
 from sqlalchemy import Float
 
-DB_URL = os.environ["DATABASE_URL"]  # force it to crash if not provided
+DB_URL = os.environ["DATABASE_URL"] 
 REDIS_URL = os.environ["REDIS_URL"]
 
 engine = create_engine(DB_URL)

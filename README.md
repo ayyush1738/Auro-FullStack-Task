@@ -97,24 +97,8 @@ http://localhost:8000
 
 ---
 
-## 🤩 Project Structure
-
-```
-Auro-FullStack-Task/
-│
-├── rag-backend/
-│   ├── app/
-│   │   ├── main.py          # Main entry point for FastAPI
-│   │   └── ...              # Other backend modules
-│   ├── requirements.txt
-│
-├── frontend/                # Vite + Tailwind Frontend (optional for now)
-└── ...
-```
-
----
-
 ## 📢 Contact
 
-Made with ❤️ by [@ayyush1738](https://github.com/ayyush1738)
+Made by [@ayyush1738](https://github.com/ayyush1738)
+Also do checkout [Ayush-Portfolio](https://ayush-portfolio-rust.vercel.app/)
 

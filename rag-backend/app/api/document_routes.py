@@ -77,4 +77,3 @@ async def delete_document(doc_id: str, db: Session = Depends(get_db)):
     db.delete(doc)
     db.commit()
     return {"message": "Document deleted"}
-
