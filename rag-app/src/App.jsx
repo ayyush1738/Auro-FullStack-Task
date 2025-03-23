@@ -21,8 +21,6 @@ function App() {
       if (currentUser) {
         setUser(currentUser);
         const idToken = await currentUser.getIdToken();
-        console.log("✅ Firebase Auth Token:", idToken); // ← DEBUG LINE
-
         setToken(idToken);
       } else {
         setUser(null);
@@ -57,7 +55,7 @@ function App() {
     if (!activeSession) setActiveSession(sessionId);
 
     try {
-      const res = await fetch("http://localhost:8000/chat/ask", {
+      const res = await fetch("https://auro-fullstack-task-production.up.railway.app/chat/ask", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +88,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("http://localhost:8000/document/upload", {
+    const res = await fetch("https://auro-fullstack-task-production.up.railway.app/document/upload", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
