@@ -15,16 +15,11 @@ app = FastAPI(title="RAG Backend", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite dev server
-        "http://127.0.0.1:5173",
-        "https://auro-full-stack-task.vercel.app",  # Your deployed frontend (optional)
-    ],
+    allow_origins=["https://auro-full-stack-task.vercel.app"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 start_time = time.time()
 
